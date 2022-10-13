@@ -1,9 +1,13 @@
 from operator import ne
+import django
 from pickle import OBJ
 import random
 
 import tabulate
 # creating class for person entry
+
+
+
 class Person:
     def __init__ (self, name,  price, item):
         self.name = name
