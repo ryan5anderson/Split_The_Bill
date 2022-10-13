@@ -68,3 +68,4 @@ def comparebalance():
             print("transaction2, 0 < 1\n")
             print_list(OGlist)
         
+test
