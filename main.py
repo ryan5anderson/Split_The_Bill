@@ -16,11 +16,11 @@ class Person:
 
 #adding values to people objects
 p1 = Person("Ryan",  86, "wifi")
-p2 = Person("Jack", 78, "water")
-p3 = Person("Riley", 298, "gas")
+p2 = Person("Jack", 76.91, "electric")
+p3 = Person("Riley", 202.85, "gas")
 p4 = Person ("Ed",  0, "nothing")
-p5 = Person("Ash", 0, "nothing")
-p6 = Person("Wang", 60, "nothin")
+p5 = Person("Ash", 135, "water")
+p6 = Person("Wang", 0, "nothing")
 
 #creating list of people objects
 OGlist = [p1, p2, p3, p4, p5, p6]
@@ -44,13 +44,15 @@ def print_list(generalList):
 #average out price for equall payment (sum / amount of people)
 average_price = sum_prices() / len(OGlist)
 
+
 print ("------money spent------")
 print_list(OGlist)
 
 
 #subtract each peoples price from average price, if negative means they must pay more
 for obj in OGlist:
-    obj.price -= average_price 
+    obj.price -= average_price
+    obj.price = round(obj.price, 2)
     
 #sort list by price high to low
 OGlist.sort(key=lambda x: x.price, reverse=True)
@@ -93,18 +95,24 @@ print_list(needsMoneyList)
 def owe_pays_not_all(owelist, needlist, i):
     owelist[i].price += needlist[i].price
     needlist[i].price -= needlist[i].price
+    owelist[i].price = round(owelist[i].price, 2)
+    #needlist[i].price = round(needlist[i].price, 2)
     put_to_end_of_list(needlist, i)
 
 #when person that owes equals the person who needs amount, so they both go to zero
 def even_transaction(owelist, needlist, i):
     needlist[i].price -= needlist[i].price
     owelist[i].price -= owelist[i].price
+    #owelist[i].price = round(owelist[i].price, 2)
+    #needlist[i].price = round(needlist[i].price, 2)
     put_to_end_of_list(owelist, i)
     
 #when person that owes pays all of their debt    
 def owe_pays_all(owelist, needlist, i):
     needlist[i].price += owelist[i].price
     owelist[i].price -= owelist[i].price
+    #owelist[i].price = round(owelist[i].price, 2)
+    needlist[i].price = round(needlist[i].price, 2)
     put_to_end_of_list(owelist, i)
 
 
@@ -122,34 +130,45 @@ def print_both_MoneyLists():
 #transaction magic below
 def comparebalanceV2():
     transactoins = []
+    done = False
 
-    while sum_pricesV2() != 0:
+    while sum_pricesV2() != 0.0:
         i = 0
         if abs(owesMoneyList[i].price) < needsMoneyList[i].price:
-            string1 = (owesMoneyList[i].name,  "paid" , needsMoneyList[i].name, abs(owesMoneyList[i].price), "dollars\n")
+            string1 = (owesMoneyList[i].name +  " pay " + needsMoneyList[i].name + "  " + str(abs(owesMoneyList[i].price)) + "  " + "dollars")
             print(string1)
             transactoins.append(string1)
             owe_pays_all(owesMoneyList, needsMoneyList, i)
             print_both_MoneyLists()
             i += 1
-        
+            print("rest", sum_pricesV2())
         
         elif abs(owesMoneyList[i].price) > needsMoneyList[i].price:
-            string2 = (owesMoneyList[i].name,  "paid" , needsMoneyList[i].name, needsMoneyList[i].price, "dollars\n")
+            string2 = (owesMoneyList[i].name + " pay " + needsMoneyList[i].name + "  " + str(needsMoneyList[i].price) + "  " + "dollars")
             print(string2)
             transactoins.append(string2)
             owe_pays_not_all(owesMoneyList, needsMoneyList, i)
             print_both_MoneyLists()
             i += 1
+            print("rest", sum_pricesV2())
 
         else:
-            string3 = (owesMoneyList[i].name,  "paid" , needsMoneyList[i].name, abs(owesMoneyList[i].price), "dollars\n")
+            string3 = (owesMoneyList[i].name + " pay " + needsMoneyList[i].name + "  " + str(abs(owesMoneyList[i].price)) + "  " + "dollars")
             print(string3)
             transactoins.append(string3)
             even_transaction(owesMoneyList, needsMoneyList, i)
             print_both_MoneyLists()
             i += 1
-    print(transactoins)
+            print("rest", sum_pricesV2())
+
+        #user_i = input("are you done? (y/n)")
+        #if user_i == "y":
+            #done = True
+
+        #if sum_pricesV2() == 0.0:
+            #done = True
+        
+    print(*transactoins, sep = "\n")
 
 
 comparebalanceV2()
